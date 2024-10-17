@@ -1,5 +1,6 @@
 package com.example.map_lab_uts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -69,7 +70,6 @@ class ProfileFragment : Fragment() {
                             nimEditText.visibility = View.GONE
                             saveButton.visibility = View.GONE
                             updateInfoButton.visibility = View.VISIBLE
-//                            constraintSet.connect(updateInfoButton.id, ConstraintSet.BOTTOM, nimTextView.id, ConstraintSet.TOP, 16)
                             changePasswordButton.visibility = View.VISIBLE
                             logoutButton.visibility = View.VISIBLE
                         }
@@ -129,6 +129,11 @@ class ProfileFragment : Fragment() {
 
         logoutButton.setOnClickListener {
             auth.signOut()
+            val sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+            with(sharedPreferences.edit()) {
+                putBoolean("isLoggedIn", false)
+                apply()
+            }
             startActivity(Intent(activity, LoginActivity::class.java))
             activity?.finish()
         }
