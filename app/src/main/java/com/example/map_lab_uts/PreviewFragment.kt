@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -107,7 +108,9 @@ class PreviewFragment : Fragment() {
                         db.collection("entries").add(entry)
                             .addOnSuccessListener {
                                 Toast.makeText(activity, "Entry saved", Toast.LENGTH_SHORT).show()
-                                findNavController().navigateUp()
+                                view?.let { v ->
+                                    Navigation.findNavController(v).navigate(R.id.action_previewFragment_to_historyFragment)
+                                }
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(activity, "Error saving entry: ${e.message}", Toast.LENGTH_SHORT).show()

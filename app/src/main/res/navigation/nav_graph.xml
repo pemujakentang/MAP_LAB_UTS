@@ -2,5 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph">
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.example.map_lab_uts.PreviewFragment"
+        android:label="PreviewFragment">
+        <action
+            android:id="@+id/action_previewFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.map_lab_uts.HistoryFragment"
+        android:label="HistoryFragment" />
 </navigation>
