@@ -108,9 +108,10 @@ class PreviewFragment : Fragment() {
                         db.collection("entries").add(entry)
                             .addOnSuccessListener {
                                 Toast.makeText(activity, "Entry saved", Toast.LENGTH_SHORT).show()
-                                view?.let { v ->
-                                    Navigation.findNavController(v).navigate(R.id.action_previewFragment_to_historyFragment)
-                                }
+                                parentFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, HistoryFragment())
+                                    .addToBackStack(null)
+                                    .commit()
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(activity, "Error saving entry: ${e.message}", Toast.LENGTH_SHORT).show()
