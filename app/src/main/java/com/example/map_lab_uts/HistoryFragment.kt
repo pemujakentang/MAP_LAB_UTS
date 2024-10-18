@@ -33,15 +33,30 @@ class HistoryFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        recyclerView = view.findViewById(R.id.recycler_view)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = HistoryAdapter(entries)
-        recyclerView.adapter = adapter
 
-        loadEntries()
+        val user = auth.currentUser
+        if (user != null) {
+            db.collection("entries")
+                .whereEqualTo("email", user.email)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .orderBy("time", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val entries = documents.map { it.toObject(Entry::class.java) }
+                    recyclerView.adapter = HistoryAdapter(entries)
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(activity, "Error loading history: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun loadEntries() {
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
         val user = auth.currentUser
         if (user != null) {
             db.collection("entries")

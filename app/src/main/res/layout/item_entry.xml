@@ -29,6 +29,14 @@
         app:layout_constraintTop_toBottomOf="@id/date_text_view"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/entry_type_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entry Type"
+        app:layout_constraintTop_toBottomOf="@id/time_text_view"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="100dp"

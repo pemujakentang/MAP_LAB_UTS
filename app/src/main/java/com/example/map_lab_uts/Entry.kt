@@ -4,5 +4,6 @@ data class Entry(
     val email: String = "",
     val date: String = "",
     val time: String = "",
-    val image: String = ""
+    val image: String = "",
+    val entryType: String = ""
 )

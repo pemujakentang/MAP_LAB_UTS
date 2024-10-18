@@ -14,6 +14,7 @@ class HistoryAdapter(private val entries: List<Entry>) : RecyclerView.Adapter<Hi
         val emailTextView: TextView = view.findViewById(R.id.email_text_view)
         val dateTextView: TextView = view.findViewById(R.id.date_text_view)
         val timeTextView: TextView = view.findViewById(R.id.time_text_view)
+        val entryTextView: TextView = view.findViewById(R.id.entry_type_text)
         val imageView: ImageView = view.findViewById(R.id.image_view)
     }
 
@@ -28,6 +29,7 @@ class HistoryAdapter(private val entries: List<Entry>) : RecyclerView.Adapter<Hi
         holder.emailTextView.text = entry.email
         holder.dateTextView.text = entry.date
         holder.timeTextView.text = entry.time
+        holder.entryTextView.text = entry.entryType
         Glide.with(holder.itemView.context).load(entry.image).into(holder.imageView)
     }
 
