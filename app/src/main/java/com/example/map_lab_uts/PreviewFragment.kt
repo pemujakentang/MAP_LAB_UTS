@@ -6,13 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -22,6 +17,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PreviewFragment : Fragment() {
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    private lateinit var storage: FirebaseStorage
 
     companion object {
         private const val ARG_FILE_PATH = "file_path"
@@ -34,10 +33,6 @@ class PreviewFragment : Fragment() {
             return fragment
         }
     }
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +53,7 @@ class PreviewFragment : Fragment() {
         val entryTypeTextView = view.findViewById<TextView>(R.id.entry_type_text)
         val nextButton = view.findViewById<Button>(R.id.next_button)
         val backButton = view.findViewById<Button>(R.id.back_button)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
 
         val filePath = arguments?.getString(ARG_FILE_PATH)
         var date: Date? = null
@@ -109,8 +105,10 @@ class PreviewFragment : Fragment() {
 
         nextButton.setOnClickListener {
             if (filePath != null && date != null) {
-                uploadImageAndSaveEntry(filePath, date) { entryType ->
+                progressBar.visibility = View.VISIBLE
+                uploadImageAndSaveEntry(filePath, date, progressBar) { entryType ->
                     entryTypeTextView.text = entryType
+                    progressBar.visibility = View.GONE
                 }
             }
         }
@@ -120,7 +118,7 @@ class PreviewFragment : Fragment() {
         }
     }
 
-    private fun uploadImageAndSaveEntry(filePath: String, date: Date, callback: (String) -> Unit) {
+    private fun uploadImageAndSaveEntry(filePath: String, date: Date, progressBar: ProgressBar, callback: (String) -> Unit) {
         val user = auth.currentUser
         if (user != null) {
             val email = user.email
@@ -182,16 +180,21 @@ class PreviewFragment : Fragment() {
                                         }
                                         .addOnFailureListener { e ->
                                             Toast.makeText(activity, "Error saving entry: ${e.message}", Toast.LENGTH_SHORT).show()
+                                            progressBar.visibility = View.GONE
                                         }
                                 }
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(activity, "Error uploading image: ${e.message}", Toast.LENGTH_SHORT).show()
+                                progressBar.visibility = View.GONE
                             }
+                    } else {
+                        progressBar.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(activity, "Error checking last entry: ${e.message}", Toast.LENGTH_SHORT).show()
+                    progressBar.visibility = View.GONE
                 }
         }
     }
