@@ -124,7 +124,10 @@ class ProfileFragment : Fragment() {
         }
 
         changePasswordButton.setOnClickListener {
-            startActivity(Intent(activity, ChangePasswordActivity::class.java))
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ChangePasswordFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         logoutButton.setOnClickListener {

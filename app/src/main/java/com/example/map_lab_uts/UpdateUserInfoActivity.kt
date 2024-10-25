@@ -23,6 +23,7 @@ class UpdateUserInfoActivity : AppCompatActivity() {
         val nameEditText = findViewById<EditText>(R.id.name_edit_text)
         val nimEditText = findViewById<EditText>(R.id.nim_edit_text)
         val saveButton = findViewById<Button>(R.id.save_button)
+        val cancelButton = findViewById<Button>(R.id.cancel_button)
 
         val user = auth.currentUser
         if (user != null) {
@@ -61,6 +62,10 @@ class UpdateUserInfoActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        cancelButton.setOnClickListener {
+            finish()
         }
     }
 }

@@ -21,6 +21,7 @@ class SignupActivity : AppCompatActivity() {
         val emailField = findViewById<EditText>(R.id.email)
         val passwordField = findViewById<EditText>(R.id.password)
         val signupButton = findViewById<Button>(R.id.signup_button)
+        val redirectToLoginButton = findViewById<Button>(R.id.btn_redirect_to_login)
 
         signupButton.setOnClickListener {
             val email = emailField.text.toString()
@@ -36,6 +37,11 @@ class SignupActivity : AppCompatActivity() {
                         Toast.makeText(this, "Signup failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
+        }
+
+        redirectToLoginButton.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
     }
 }
